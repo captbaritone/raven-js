@@ -4,10 +4,6 @@
 var TraceKit = require('../vendor/TraceKit/tracekit');
 var stringify = require('../vendor/json-stringify-safe/stringify');
 var RavenConfigError = require('./configError');
-var utils = require('./utils');
-
-var isError = utils.isError,
-    isObject = utils.isObject;
 
 var wrapConsoleMethod = require('./console').wrapMethod;
 
@@ -1719,6 +1715,21 @@ function isString(what) {
 function isEmptyObject(what) {
     for (var _ in what) return false;  // eslint-disable-line guard-for-in, no-unused-vars
     return true;
+}
+
+function isObject(what) {
+    return typeof what === 'object' && what !== null;
+}
+
+// Yanked from https://git.io/vS8DV re-used under CC0
+// with some tiny modifications
+function isError(value) {
+  switch ({}.toString.call(value)) {
+    case '[object Error]': return true;
+    case '[object Exception]': return true;
+    case '[object DOMException]': return true;
+    default: return value instanceof Error;
+  }
 }
 
 function each(obj, callback) {
